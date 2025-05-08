@@ -1,28 +1,22 @@
 name: Node.js CI
 
-on:
-  push:
-    branches:
-      - master  # This will run the action when you push to the 'main' branch
-  pull_request:
-    branches:
-      - master  # This will run the action on pull requests to 'main'
+on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # This means the workflow will run on a Linux-based GitHub runner
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2  # This step checks out your repository code
+      uses: actions/checkout@v2
 
     - name: Set up Node.js
-      uses: actions/setup-node@v2  # This sets up Node.js on the runner
+      uses: actions/setup-node@v2
       with:
-        node-version: '14'  # You can change this to whatever version of Node.js you want to use
+        node-version: '14'  # you can specify your desired Node.js version
 
     - name: Install dependencies
-      run: npm install  # This installs your project's dependencies (if you have a 'package.json' file)
+      run: npm install  # or yarn install
 
     - name: Run index.js
-      run: node index.js  # This runs your 'index.js' file
+      run: node index.js
