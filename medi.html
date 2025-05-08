@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Herbal Haven Chatbot</title>
+    
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+        <style>
+            body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background: url('herbal1.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+    
+            h1 {
+                color: #212121; /* Deep Crimson */
+                font-size: 3rem;
+                font-weight: 600;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            }
+    
+            .chatbox {
+                width: 50%;
+                height: 450px;
+                border-radius: 15px;
+                margin: auto;
+                padding: 15px;
+                background-color: #ffffff;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+                overflow-y: auto;
+                text-align: left;
+                font-size: 1.3rem;
+            }
+    
+            .user-message {
+                color: #6a1b9a; /* Deep Purple */
+                font-weight: bold;
+                text-align: right;
+                margin: 10px 0;
+                padding: 10px;
+                background-color: #e1bee7; /* Soft Lavender */
+                display: inline-block;
+                border-radius: 12px;
+                max-width: 75%;
+                float: right;
+                clear: both;
+            }
+    
+            .bot-message {
+                color: #bf360c; /* Burnt Orange */
+                font-style: italic;
+                text-align: left;
+                margin: 10px 0;
+                padding: 10px;
+                background-color: #ffccbc; /* Light Peach */
+                display: inline-block;
+                border-radius: 12px;
+                max-width: 75%;
+                float: left;
+                clear: both;
+            }
+    
+            .input-container {
+                margin-top: 15px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+    
+            .input-box {
+                width: 60%;
+                padding: 12px;
+                border: 2px solid #ccc;
+                border-radius: 8px;
+                font-size: 18px;
+                font-family: 'Poppins', sans-serif;
+                outline: none;
+                transition: border 0.3s ease;
+            }
+    
+            .input-box:focus {
+                border-color: #b71c1c;
+            }
+    
+            .send-btn {
+                padding: 12px 18px;
+                background-color: #9c1c1c; /* Crimson Red */
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 18px;
+                margin-left: 12px;
+                transition: 0.3s;
+            }
+    
+            .send-btn:hover {
+                background-color: #880e4f; /* Darker Red */
+            }
+    
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .chatbox {
+                    width: 90%;
+                    height: 400px;
+                }
+    
+                .input-box {
+                    width: 70%;
+                    font-size: 16px;
+                }
+    
+                .send-btn {
+                    font-size: 16px;
+                }
+            }
+        </style>
+    </head>      
+<body>
+    <h1>Herbal Haven</h1>
+    <div class="chatbox" id="chatbox"></div>
+    <input type="text" id="userInput" class="input-box" placeholder="Type your message...">
+    <button id="sendBtn" class="send-btn">Send</button>
+
+    <script>
+    document.getElementById("sendBtn").addEventListener("click", async function() {
+        const userInput = document.getElementById("userInput").value;
+        const chatBox = document.getElementById("chatbox");
+
+        if (!userInput.trim()) return; // Prevent empty messages
+
+        chatBox.innerHTML += `<p class="user-message">You: ${userInput}</p>`;
+
+        try {
+            const response = await fetch(`http://localhost:5000/chat?message=${encodeURIComponent(userInput)}`);
+            const data = await response.json();
+
+            chatBox.innerHTML += `<p class="bot-message">Bot: ${data.reply}</p>`;
+        } catch (error) {
+            chatBox.innerHTML += `<p style="color:red;"><b>Error:</b> Could not connect to server.</p>`;
+        }
+
+        document.getElementById("userInput").value = ""; // Clear input box
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to latest message
+    });
+
+    // Enable "Enter" key to send message
+    document.getElementById("userInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("sendBtn").click();
+        }
+    });
+    </script>
+</body>
+</html>
